@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import path from "path";
+import router from "./app/routes";
 
 const app: Application = express();
 
@@ -17,9 +18,9 @@ app.use(
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-  })
+  }),
 );
-
+app.use("/api/v1", router);
 // Test route
 app.get("/", (req: Request, res: Response) => {
   res.json({ message: "Backend is running 🚀" });
