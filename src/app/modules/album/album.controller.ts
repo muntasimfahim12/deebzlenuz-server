@@ -5,12 +5,20 @@ import catchAsync from "../../utils/CatchAsync";
 
 // CREATE
 const createAlbum = catchAsync(async (req: Request, res: Response) => {
-  const result = await AlbumService.createAlbum(req.body);
+  const file = req.file;
+
+  let albumData = typeof req.body.data === "string" ? JSON.parse(req.body.data) : req.body;
+
+  if (file) {
+    albumData.cover_image = file.path; 
+  }
+
+  const result = await AlbumService.createAlbum(albumData);
 
   sendResponse(res, {
     statusCode: 201,
     success: true,
-    message: "Album created",
+    message: "Album created successfully",
     data: result,
   });
 });
@@ -53,12 +61,19 @@ const getSingleAlbum = catchAsync(async (req: Request, res: Response) => {
 
 // UPDATE
 const updateAlbum = catchAsync(async (req: Request, res: Response) => {
-  const result = await AlbumService.updateAlbum(req.params.id, req.body);
+  const file = req.file;
+  let updateData = typeof req.body.data === "string" ? JSON.parse(req.body.data) : req.body;
+
+  if (file) {
+    updateData.cover_image = file.path;
+  }
+
+  const result = await AlbumService.updateAlbum(req.params.id, updateData);
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "Album updated",
+    message: "Album updated successfully",
     data: result,
   });
 });

@@ -1,12 +1,37 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { TestimonialController } from "./testimonial.controller";
+import { upload } from "../../utils/upload";
 
 const router = express.Router();
 
-// ADMIN
-router.post("/", TestimonialController.createTestimonial);
+// ADMIN - Create with Image
+router.post(
+    "/",
+    upload.single("avatar"),
+    (req: Request, res: Response, next: NextFunction) => {
+        if (req.file) {
+            req.body.avatar = req.file.path;
+        }
+        next();
+    },
+    TestimonialController.createTestimonial
+);
+
+// ADMIN - Update with Image (Optional)
+router.patch(
+    "/:id",
+    upload.single("avatar"),
+    (req: Request, res: Response, next: NextFunction) => {
+        if (req.file) {
+            req.body.avatar = req.file.path;
+        }
+        next();
+    },
+    TestimonialController.updateTestimonial
+);
+
+// Other Routes
 router.get("/", TestimonialController.getAllTestimonials);
-router.patch("/:id", TestimonialController.updateTestimonial);
 router.delete("/:id", TestimonialController.deleteTestimonial);
 router.patch("/:id/status", TestimonialController.updateStatus);
 
