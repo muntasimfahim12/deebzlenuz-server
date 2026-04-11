@@ -27,6 +27,9 @@ export type TAlbum = {
   total_tracks: string;
   duration: string;
 
+  apple_music_link?: string;
+  external_cover_url?: string;
+
   description: string;
   tag?: string;
 
